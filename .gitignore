@@ -1,0 +1,21 @@
+# 1. Environment & API Keys (SANGAT PENTING!)
+.env
+
+# 2. Python Cache Files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# 3. Output Logs & Generated Reports Lokal
+output/
+*.log
+
+# 4. Virtual Environment
+venv/
+.venv/
+env/
+
+# 5. IDE / Editor Configs (Opsional)
+.vscode/
+.idea/
+.DS_Store
