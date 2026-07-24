@@ -1,11 +1,19 @@
-import sys
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import os
 
-# Add root directory to python path for Vercel serverless environment
-root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if root_dir not in sys.path:
-    sys.path.insert(0, root_dir)
+app = FastAPI()
 
-from app.main import app
+# Mount folder public untuk file statis jika diakses langsung
+public_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "public")
 
-# Vercel Serverless Function uses `app` instance exported here
+if os.path.exists(public_dir):
+    app.mount("/static", StaticFiles(directory=public_dir), name="static")
+
+@app.get("/")
+def read_root():
+    index_file = os.path.join(public_dir, "index.html")
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+    return {"message": "Agentic Testing API is running"}
