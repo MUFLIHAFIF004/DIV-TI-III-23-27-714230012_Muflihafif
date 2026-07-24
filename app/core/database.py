@@ -24,17 +24,21 @@ def get_motor_client():
 def save_local_output_files(document: Dict[str, Any], doc_id: str) -> Dict[str, str]:
     """
     Saves raw JSON output and Markdown report into app/output/raw_json/ and app/output/reports/
+    Includes safe handling for read-only serverless environments like Vercel.
     """
-    base_dir = os.path.dirname(os.path.dirname(__file__)) # d:\Brankas Semester 6\DIV-TI-III-23-27-714230012_Muflihafif\app
-    raw_json_dir = os.path.join(base_dir, "output", "raw_json")
-    reports_dir = os.path.join(base_dir, "output", "reports")
-
-    os.makedirs(raw_json_dir, exist_ok=True)
-    os.makedirs(reports_dir, exist_ok=True)
-
     timestamp_str = datetime.now().strftime("%Y%m%d_%H%M%S")
     json_filename = f"test_run_{timestamp_str}_{doc_id[:8]}.json"
     md_filename = f"test_report_{timestamp_str}_{doc_id[:8]}.md"
+
+    # Determine output directories (use /tmp on Vercel/Serverless if read-only)
+    is_vercel = os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME")
+    if is_vercel:
+        raw_json_dir = "/tmp/output/raw_json"
+        reports_dir = "/tmp/output/reports"
+    else:
+        base_dir = os.path.dirname(os.path.dirname(__file__)) # d:\Brankas Semester 6\DIV-TI-III-23-27-714230012_Muflihafif\app
+        raw_json_dir = os.path.join(base_dir, "output", "raw_json")
+        reports_dir = os.path.join(base_dir, "output", "reports")
 
     json_path = os.path.join(raw_json_dir, json_filename)
     md_path = os.path.join(reports_dir, md_filename)
@@ -45,20 +49,22 @@ def save_local_output_files(document: Dict[str, Any], doc_id: str) -> Dict[str, 
         doc_copy["id"] = str(doc_copy["_id"])
         del doc_copy["_id"]
 
-    # Save raw JSON file
+    # Safely create directories & save raw JSON file
     try:
+        os.makedirs(raw_json_dir, exist_ok=True)
         with open(json_path, "w", encoding="utf-8") as f:
             json.dump(doc_copy, f, indent=2, ensure_ascii=False, default=str)
     except Exception as e:
-        logger.error(f"Failed to write raw JSON output file: {e}")
+        logger.warning(f"Local JSON output write skipped (Read-Only / Vercel): {e}")
 
-    # Save Markdown report file
+    # Safely create directories & save Markdown report file
     try:
+        os.makedirs(reports_dir, exist_ok=True)
         report_md = document.get("llm_evaluation", {}).get("report_md", "# Report")
         with open(md_path, "w", encoding="utf-8") as f:
             f.write(report_md)
     except Exception as e:
-        logger.error(f"Failed to write Markdown report file: {e}")
+        logger.warning(f"Local MD report write skipped (Read-Only / Vercel): {e}")
 
     return {
         "json_filepath": f"app/output/raw_json/{json_filename}",
@@ -79,7 +85,7 @@ async def save_meal_plan(document: Dict[str, Any]) -> str:
         except Exception as e:
             logger.error(f"MongoDB save failed: {e}. Falling back to in-memory store.")
 
-    # Save to local file system in app/output/
+    # Save to local file system / serverless tmp
     local_files = save_local_output_files(document, doc_id)
     document["local_files"] = local_files
 
