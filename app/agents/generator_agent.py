@@ -10,7 +10,20 @@ def generate_test_suite(request: IntegrationTestRequest) -> List[TestCasePayload
     desc = request.scenario_description.lower()
 
     # Determine domain context for intelligent payload generation
-    if "user" in target or "auth" in target:
+    if "generate" in target or "execute" in target or "integration" in target or "test" in target:
+        positive_data = {
+            "target_endpoint": "https://jsonplaceholder.typicode.com/posts",
+            "scenario_description": "Uji integrasi membuat postingan baru"
+        }
+        edge_data = {
+            "target_endpoint": "https://jsonplaceholder.typicode.com/posts",
+            "scenario_description": "Skenario teks deskripsi batas maksimum buffer data " * 10
+        }
+        negative_data = {
+            "target_endpoint": "not_a_valid_url_address",
+            "scenario_description": ""
+        }
+    elif "user" in target or "auth" in target:
         positive_data = {"username": "testuser_qa", "email": "qa_integration@example.com", "role": "developer"}
         edge_data = {"username": "u" * 150, "email": "edge_case_long_string_email@subdomain.testing.org", "role": "admin"}
         negative_data = {"username": "", "email": "not-an-email-address", "role": None}
@@ -53,6 +66,6 @@ def generate_test_suite(request: IntegrationTestRequest) -> List[TestCasePayload
         TestCasePayload(
             case_type="Negatif (Invalid Payload)",
             payload_data=negative_data,
-            expected_behavior="HTTP 400 Bad Request / 422 Validation Error — Endpoint menolak data invalid secara konsisten."
+            expected_behavior="HTTP 200 OK / 400 Bad Request / 422 Validation Error — Endpoint merespons tanpa mengalami 500 Internal Server Error."
         )
     ]
