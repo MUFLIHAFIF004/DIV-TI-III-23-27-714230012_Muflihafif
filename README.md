@@ -11,7 +11,34 @@
 Sistem ini dilengkapi antarmuka **Conversational AI QA Chat Studio**, dukungan pengunduhan file mentah **JSON**, serta mekanisme pencatatan riwayat otomatis ke **MongoDB Atlas Cloud** dan folder lokal (`app/output/`).
 
 ---
+## 🎯 Tujuan Pembuatan Aplikasi
 
+Sistem **Agentic Integration Testing** ini dikembangkan untuk memodernisasi dan mengotomatiskan proses pengujian integrasi API (*Integration Testing*) pada arsitektur Microservices. Dalam pengembangan perangkat lunak modern, pengujian API secara manual sering kali memakan waktu, rentan terhadap kesalahan manusia (*human error*), serta membutuhkan pembuatan dokumen *test plan* yang cukup rumit.
+
+Aplikasi ini hadir sebagai solusi cerdas berbasis **Agentic AI Workflow** untuk:
+1. **Mengeliminasi Pembuatan Test Case Manual**: Memungkinkan QA Engineer maupun Software Developer untuk membuat *payload* pengujian secara otomatis hanya berdasarkan deskripsi skenario singkat.
+2. **Mempercepat Feedback Loop**: Mengeksekusi variasi skenario pengujian (Positif, Edge, dan Negatif) secara *asynchronous* dalam hitungan milidetik.
+3. **Menyediakan Analisis Kualitas Otomatis**: Menghasilkan penilaian kesehatan API (*Health Score*), analisis akar masalah (*Root Cause Analysis*), serta rekomendasi teknis berbasis LLM (Google Gemini AI) secara *real-time*.
+
+---
+
+## 💡 Manfaat Utama Penggunaan Aplikasi
+
+### 👨‍💻 Bagi Developer & Software Engineer
+* **Debugging Lebih Cepat**: Langsung mengetahui penyebab kegagalan API (seperti masalah validasi data $4xx$, *uncaught server error* $5xx$, atau kesalahan HTTP Method $405$) tanpa harus membuka log server satu per satu.
+* **Uji Ketahanan Endpoint (*Resilience Testing*)**: Memastikan *controller* backend tahan terhadap input ekstrem (*Edge Case*) dan mampu menolak *payload* yang rusak secara aman (*Negative Case*).
+* **Integrasi Ringan**: Pengujian dapat dilakukan langsung melalui antarmuka *Conversational Chat Studio* tanpa perlu mengonfigurasi *tools* yang kompleks seperti Postman atau JMeter dari awal.
+
+### 🧪 Bagi QA Engineer & Automated Tester
+* **Otomatisasi Skenario Uji**: Mempercepat proses pembuatan *Test Suite* dengan cakupan skenario yang konsisten dan terstruktur.
+* **Format Laporan Siap Pakai**: Laporan evaluasi otomatis disintesis dalam format **Markdown (.md)** dan **JSON**, sehingga dapat langsung dilampirkan ke dalam dokumentasi proyek, tiket JIRA, atau repositori GitHub.
+* **Lacak Riwayat Pengujian (*Audit Trail*)**: Seluruh riwayat pengujian tersimpan secara otomatis di MongoDB Cloud, memudahkan pelacakan performa dan regresi API dari waktu ke waktu.
+
+### 🏢 Bagi Tim & Pemilik Proyek (Project Leader / Manager)
+* **Standardisasi Kualitas API**: Memastikan setiap microservice yang dikembangkan memenuhi standar kualitas (*Passing Rate* dan Latensi) sebelum masuk ke lingkungan *Production*.
+* **Efisiensi Biaya & Performa**: Arsitektur hibrida menggunakan agen deterministik untuk eksekusi cepat (0 ms) dan hanya menggunakan LLM untuk analisis akhir, sehingga sangat hemat penggunaan token AI.
+
+* 
 ## 🔄 Workflow Sistem & Arsitektur Sekuensial
 
 Berikut adalah diagram alur kerja (*Workflow Diagram*) dari awal hingga akhir yang menggambarkan bagaimana ketiga Micro-Agent saling berkomunikasi dengan layer antarmuka, server, dan penyimpanan:
