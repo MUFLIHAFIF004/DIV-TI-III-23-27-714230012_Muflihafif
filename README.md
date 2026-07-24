@@ -104,12 +104,12 @@ Negatif (Invalid Payload)   405       569.04 ms   LULUS   -> (Karena 405 adalah 
 
 ### Backend Framework & Libraries
 * **Python 3.10+**: Bahasa pemrograman utama.
-* **FastAPI (>=0.100.0)**: Framework backend async modern berkinerja tinggi.
-* **google-genai (>=0.1.0)**: SDK resmi Google GenAI untuk integrasi Gemini AI (`gemini-2.5-flash`).
-* **httpx (>=0.24.0)**: Client HTTP async untuk eksekusi panggilan API otomatis.
-* **motor (>=3.0.0)** & **pymongo (>=4.0.0)**: Driver MongoDB async untuk penyimpanan cloud.
-* **pydantic (>=2.0.0)**: Validasi dan kontrat data schema.
-* **uvicorn (>=0.20.0)**: Server ASGI lokal.
+* **FastAPI **: Framework backend async modern berkinerja tinggi.
+* **google-genai **: SDK resmi Google GenAI untuk integrasi Gemini AI (`gemini-2.5-flash`).
+* **httpx **: Client HTTP async untuk eksekusi panggilan API otomatis.
+* **motor ** & **pymongo (>=4.0.0)**: Driver MongoDB async untuk penyimpanan cloud.
+* **pydantic **: Validasi dan kontrat data schema.
+* **uvicorn **: Server ASGI lokal.
 
 ### Frontend Technologies
 * **HTML5 & Vanilla JavaScript (ES6+)**: Logika interaktif obrolan chat & Blob downloader.
